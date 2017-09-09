@@ -1,0 +1,38 @@
+{
+  "name": "quick-restore",
+  "version": "0.1.0",
+  "scripts": {
+    "test": "jest --config jest.json --runInBand",
+    "lint": "semistandard --env jest"
+  },
+  "bin": {
+    "quick-restore": "src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Patrik-Lundqvist/quick-restore.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "2.54.0",
+    "tedious": "1.15.0",
+    "fs-extra": "4.0.1"
+  },
+  "devDependencies": {
+    "jest": "20.0.4",
+    "md5-file": "3.2.2",
+    "mock-aws-s3": "2.6.0",
+    "semistandard": "11.0.0"
+  },
+  "engines": {
+    "node": ">=8.3.0"
+  },
+  "files": [
+    "src"
+  ],
+  "keywords": [
+    "backup restore",
+    "mssql restore",
+    "restore"
+  ]
+}

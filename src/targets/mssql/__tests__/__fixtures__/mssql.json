@@ -1,0 +1,9 @@
+{
+  "connection": {
+    "server": "127.0.0.1",
+    "username": "sa",
+    "password": "Password12!",
+    "database": "test990681344"
+  },
+  "script": "test.sql"
+}

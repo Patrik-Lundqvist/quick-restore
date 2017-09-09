@@ -1,0 +1,11 @@
+{
+  "automock": false,
+  "moduleFileExtensions": [
+    "js"
+  ],
+  "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(js)$",
+  "testPathIgnorePatterns": [
+    "/__mocks__/.*$"
+  ],
+  "verbose": true
+}
