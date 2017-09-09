@@ -35,7 +35,7 @@ describe('s3 test', function () {
     const s3Source = new S3Source(configWithPrefix, tmpDir, noop, MockS3Client);
     const file = await s3Source.downloadLatestFile();
     const isSame = await isSameFile(file, latestBarFilePath);
-    expect(isSame).toBe(true);
+    expect(isSame).toBe(false)
   });
 
   it('uses cached file', async () => {
