@@ -3,6 +3,8 @@ branches:
     - master 
  
 environment:
+  npm_auth_token:
+    secure: 319pUD4OIQuMb+zMqcX/mxBhYCG6pZpJ7AAuBcUHQO5sRu5+r4VzfddBqFne642P
   matrix:
     - nodejs_version: "8"
 
