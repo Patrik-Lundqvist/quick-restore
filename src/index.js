@@ -3,6 +3,7 @@ const configReader = require('./utils/configReader');
 const logger = require('./utils/logger');
 const MssqlTarget = require('./targets/mssql');
 const S3Source = require('./sources/s3');
+const GCSSource = require('./sources/gcs')
 const path = require('path');
 const fs = require('fs-extra');
 const packageSettings = require('../package');
@@ -37,7 +38,14 @@ const getSource = config => {
   if (!config.source) {
     throw new Error('No source setting found');
   }
-  return new S3Source(config.source, baseDir, logger);
+  
+  if (config.source.client === 'gcs') {
+    return new GCSSource(config.source, baseDir, logger);
+  } else if (config.source.client === 's3') {
+    return new S3Source(config.source, baseDir, logger);
+  }
+
+  throw new Error(`No matching source client found`);
 };
 
 const restore = async () => {

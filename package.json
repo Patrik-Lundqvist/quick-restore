@@ -14,6 +14,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@google-cloud/storage": "3.3.1",
     "aws-sdk": "2.543.0",
     "fs-extra": "8.1.0",
     "tedious": "6.4.0"

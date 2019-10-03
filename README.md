@@ -7,6 +7,7 @@ Currently supports:
 Sources:
 - Local files
 - S3
+- Google Cloud Storage
 
 Targets:
 - MSSQL
@@ -19,7 +20,7 @@ npm install quick-restore -g
 
 ## Setup workspace
 #### Create config file at `<working-dir>/.quick-restore/config.json`
-Example:
+Example S3:
 ```json
 {
   "source": {
@@ -44,6 +45,32 @@ Example:
 }
 ```
 
+Example GCS:
+```json
+{
+  "source": {
+    "client": "s3",
+    "connection": {
+      "bucket": "my-bucket",
+      "keyFilePath": "/path/to/keyFile.json"
+    },
+    "prefix": "sqlbackup/"
+  },
+  "target": {
+    "client": "mssql",
+    "connection": {
+      "server": "127.0.0.1",
+      "username": "sa",
+      "password": "1234",
+      "database": "northwind"
+    },
+    "script": "./scrub.sql"
+  }
+}
+```
+Setup and download your project's key file by following the instructions here:
+https://cloud.google.com/docs/authentication/getting-started
+
 ## Usage
 
 #### Restore configured source
@@ -56,3 +83,6 @@ quick-restore
 ```
 quick-restore <filepath>
 ```
+
+#### Set database permissions
+https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/configure-file-system-permissions-for-database-engine-access?view=sql-server-2017
