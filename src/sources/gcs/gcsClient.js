@@ -1,5 +1,5 @@
 const path = require('path');
-const {Storage} = require('@google-cloud/storage');
+const { Storage } = require('@google-cloud/storage');
 
 class GCSClient {
   constructor (config, baseDir) {
@@ -12,38 +12,38 @@ class GCSClient {
   downloadFile (key, filePath) {
     return new Promise((resolve, reject) => {
       const options = {
-        destination: filePath,
+        destination: filePath
       };
-      
+
       this.GCS
-      .bucket(this.config.connection.bucket)
-      .file(key)
-      .download(options,
-        (err, data) => {
-          if (!err) {
-            resolve(data);
-          } else {
-            reject(err);
-          }
-        });
+        .bucket(this.config.connection.bucket)
+        .file(key)
+        .download(options,
+          (err, data) => {
+            if (!err) {
+              resolve(data);
+            } else {
+              reject(err);
+            }
+          });
     });
   }
 
   listObjects (prefix) {
     return new Promise((resolve, reject) => {
       const options = {
-        prefix: prefix,
+        prefix: prefix
       };
-      
+
       this.GCS.bucket(this.config.connection.bucket)
-      .getFiles(options,
-        (err, data) => {
-          if (!err) {
-            resolve(data);
-          } else {
-            reject(err);
-          }
-        });
+        .getFiles(options,
+          (err, data) => {
+            if (!err) {
+              resolve(data);
+            } else {
+              reject(err);
+            }
+          });
     });
   }
 }

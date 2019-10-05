@@ -15,8 +15,8 @@ class GCSSource {
   constructor (config, baseDir, logFn, GCS = GCSClient) {
     this.gcs = new GCS(config, baseDir);
     this.baseDir = baseDir;
-    this.cacheDir = path.join(this.baseDir, `/cache/gcs`);
-    this.cacheInfoPath = path.join(this.cacheDir, `/cache.json`);
+    this.cacheDir = path.join(this.baseDir, '/cache/gcs');
+    this.cacheInfoPath = path.join(this.cacheDir, '/cache.json');
     this.config = Object.assign({}, baseConfig, config);
     this.log = logFn || noop;
   }
