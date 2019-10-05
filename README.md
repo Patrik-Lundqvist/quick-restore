@@ -49,7 +49,7 @@ Example GCS:
 ```json
 {
   "source": {
-    "client": "s3",
+    "client": "gcs",
     "connection": {
       "bucket": "my-bucket",
       "keyFilePath": "/path/to/keyFile.json"
