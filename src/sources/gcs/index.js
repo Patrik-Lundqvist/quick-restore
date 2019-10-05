@@ -65,13 +65,8 @@ class GCSSource {
   }
 
   async getLatestObject () {
-    const objects = await this.getAllObjects(this.config.prefix);
+    const objects = await this.gcs.listObjects(this.config.prefix);
     return this.findLatestObject(objects);
-  }
-
-  async getAllObjects (prefix, objects = []) {
-    const data = await this.gcs.listObjects(prefix);
-    return objects.concat(data);
   }
 
   findLatestObject (objects) {
