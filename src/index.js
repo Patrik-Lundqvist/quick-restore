@@ -8,7 +8,6 @@ const path = require('path');
 const fs = require('fs-extra');
 const packageSettings = require('../package');
 const baseDir = path.join(process.cwd(), `/${packageSettings.name}`);
-
 const userArgs = process.argv.slice(2);
 const filePath = userArgs[0];
 

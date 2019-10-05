@@ -4,7 +4,7 @@ branches:
  
 environment:
   npm_auth_token:
-    secure: 319pUD4OIQuMb+zMqcX/mxBhYCG6pZpJ7AAuBcUHQO5sRu5+r4VzfddBqFne642P
+    secure: eSBcha8PsT3+GQ3n8jFRhNX5bCR/zN0RQZHIbiFsFTj70zkRtyhkolOvY8ENRVKc
 
 version: "{build}"
 
