@@ -5,8 +5,6 @@ branches:
 environment:
   npm_auth_token:
     secure: 319pUD4OIQuMb+zMqcX/mxBhYCG6pZpJ7AAuBcUHQO5sRu5+r4VzfddBqFne642P
-  matrix:
-    - nodejs_version: "8"
 
 version: "{build}"
 
@@ -21,8 +19,8 @@ services:
 install:
   - node --version
   - npm --version
-  - ps: Install-Product node $env:nodejs_version x64
-  - npm i -g npm@5.3
+  - ps: Install-Product node 8.16.0
+  - npm i -g npm@6.4.1
   - node --version
   - npm --version
   - set PATH=%APPDATA%\npm;%PATH%
