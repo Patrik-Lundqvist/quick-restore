@@ -19,7 +19,7 @@ npm install quick-restore -g
 ```
 
 ## Setup workspace
-#### Create config file at `<working-dir>/.quick-restore/config.json`
+#### Create config file at `<working-dir>/quick-restore/config.json`
 Example S3:
 ```json
 {
