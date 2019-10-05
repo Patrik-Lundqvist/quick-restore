@@ -17,8 +17,8 @@ class S3Source {
   constructor (config, baseDir, logFn, S3 = S3Client) {
     this.s3 = new S3(config);
     this.baseDir = baseDir;
-    this.cacheDir = path.join(this.baseDir, `/cache/s3`);
-    this.cacheInfoPath = path.join(this.cacheDir, `/cache.json`);
+    this.cacheDir = path.join(this.baseDir, '/cache/s3');
+    this.cacheInfoPath = path.join(this.cacheDir, '/cache.json');
     this.config = Object.assign({}, baseConfig, config);
     this.log = logFn || noop;
   }

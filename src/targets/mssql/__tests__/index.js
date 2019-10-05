@@ -7,7 +7,7 @@ const testFile = path.join(
   __dirname,
   `./__fixtures__/${config.connection.database}.bak`
 );
-const basePath = path.join(__dirname, `./__fixtures__`);
+const basePath = path.join(__dirname, './__fixtures__');
 const timeout = 20000;
 
 describe('mssql tests', function () {

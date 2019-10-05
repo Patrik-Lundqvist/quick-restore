@@ -9,9 +9,14 @@ class MssqlClient {
   init () {
     return new Promise((resolve, reject) => {
       this.connection = new Connection({
-        userName: this.config.username,
-        password: this.config.password,
         server: this.config.server,
+        authentication: {
+          type: 'default',
+          options: {
+            userName: this.config.username,
+            password: this.config.password
+          }
+        },
         options: {
           rowCollectionOnRequestCompletion: true
         }

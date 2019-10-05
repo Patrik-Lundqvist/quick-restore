@@ -28,14 +28,14 @@ const runWithSource = async (source, target) => {
 
 const getTarget = config => {
   if (!config.target) {
-    throw new Error(`No target setting found`);
+    throw new Error('No target setting found');
   }
   return new MssqlTarget(config.target, baseDir, logger);
 };
 
 const getSource = config => {
   if (!config.source) {
-    throw new Error(`No source setting found`);
+    throw new Error('No source setting found');
   }
   return new S3Source(config.source, baseDir, logger);
 };

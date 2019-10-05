@@ -14,15 +14,15 @@
   },
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "2.54.0",
-    "tedious": "1.15.0",
-    "fs-extra": "4.0.1"
+    "aws-sdk": "2.543.0",
+    "fs-extra": "8.1.0",
+    "tedious": "6.4.0"
   },
   "devDependencies": {
-    "jest": "20.0.4",
-    "md5-file": "3.2.2",
+    "jest": "24.9.0",
+    "md5-file": "4.0.0",
     "mock-aws-s3": "2.6.0",
-    "semistandard": "11.0.0"
+    "semistandard": "14.2.0"
   },
   "engines": {
     "node": ">=8.3.0"

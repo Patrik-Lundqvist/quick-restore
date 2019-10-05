@@ -1,7 +1,7 @@
 const path = require('path');
 const AWSMock = require('mock-aws-s3');
 
-const basePath = path.join(__dirname, `../__fixtures__`);
+const basePath = path.join(__dirname, '../__fixtures__');
 
 AWSMock.config.basePath = basePath;
 
