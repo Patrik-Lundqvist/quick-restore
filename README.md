@@ -12,14 +12,24 @@ Sources:
 Targets:
 - MSSQL
 
-## Install
+## Usage
+
+### Restore a [workspace](#setup-workspace)
 
 ```
-npm install quick-restore -g
+npx quick-restore
+```
+
+### Restore a local file
+
+```
+npx quick-restore <filepath>
 ```
 
 ## Setup workspace
-#### Create config file at `<working-dir>/quick-restore/config.json`
+
+- Create config file at `<working-dir>/quick-restore/config.json`
+
 Example S3:
 ```json
 {
@@ -46,6 +56,7 @@ Example S3:
 ```
 
 Example GCS:
+
 ```json
 {
   "source": {
@@ -68,21 +79,14 @@ Example GCS:
   }
 }
 ```
-Setup and download your project's key file by following the instructions here:
+> Setup and download your project's key file by following the instructions here:
 https://cloud.google.com/docs/authentication/getting-started
 
-## Usage
 
-#### Restore configured source
-```
-quick-restore
-```
 
-#### Restore local file
+## Troubleshooting
 
-```
-quick-restore <filepath>
-```
+### Set file system permissions
+The restoring process might be failing due to insufficient file system permissions for the database engine. See this link on how to resolve it: 
 
-#### Set database permissions
-https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/configure-file-system-permissions-for-database-engine-access?view=sql-server-2017
+- https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/configure-file-system-permissions-for-database-engine-access?view=sql-server-2017
