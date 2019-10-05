@@ -10,41 +10,25 @@ class GCSClient {
   }
 
   downloadFile (key, filePath) {
-    return new Promise((resolve, reject) => {
-      const options = {
-        destination: filePath
-      };
+    const options = {
+      destination: filePath
+    };
 
-      this.GCS
-        .bucket(this.config.connection.bucket)
-        .file(key)
-        .download(options,
-          (err, data) => {
-            if (!err) {
-              resolve(data);
-            } else {
-              reject(err);
-            }
-          });
-    });
+    return this.GCS
+      .bucket(this.config.connection.bucket)
+      .file(key)
+      .download(options);
   }
 
   listObjects (prefix) {
-    return new Promise((resolve, reject) => {
-      const options = {
-        prefix: prefix
-      };
+    const options = {
+      prefix: prefix
+    };
 
-      this.GCS.bucket(this.config.connection.bucket)
-        .getFiles(options,
-          (err, data) => {
-            if (!err) {
-              resolve(data);
-            } else {
-              reject(err);
-            }
-          });
-    });
+    return this.GCS
+      .bucket(this.config.connection.bucket)
+      .getFiles(options)
+      .then((data) => data[0]);
   }
 }
 
