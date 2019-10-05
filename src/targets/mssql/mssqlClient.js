@@ -18,7 +18,8 @@ class MssqlClient {
           }
         },
         options: {
-          rowCollectionOnRequestCompletion: true
+          rowCollectionOnRequestCompletion: true,
+          requestTimeout: 0
         }
       });
       this.connection.on('connect', err => {
