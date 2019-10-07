@@ -65,6 +65,7 @@ class GCSSource {
   }
 
   async getLatestObject () {
+    this.log('Determining latest file');
     const objects = await this.gcs.listObjects(this.config.prefix);
     return this.findLatestObject(objects);
   }

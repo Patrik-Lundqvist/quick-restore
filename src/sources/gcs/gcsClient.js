@@ -4,8 +4,9 @@ const { Storage } = require('@google-cloud/storage');
 class GCSClient {
   constructor (config, baseDir) {
     this.config = config;
+    const filePath = path.resolve(baseDir, this.config.connection.keyFilePath);
     this.GCS = new Storage({
-      keyFilename: path.join(baseDir, this.config.connection.keyFilePath)
+      keyFilename: filePath
     });
   }
 
