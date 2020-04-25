@@ -2,7 +2,6 @@
   "name": "quick-restore",
   "version": "0.3.0",
   "scripts": {
-    "test": "jest --config jest.json --runInBand",
     "lint": "semistandard --env jest"
   },
   "bin": {
@@ -20,9 +19,6 @@
     "tedious": "6.4.0"
   },
   "devDependencies": {
-    "jest": "24.9.0",
-    "md5-file": "4.0.0",
-    "mock-aws-s3": "2.6.0",
     "semistandard": "14.2.0"
   },
   "engines": {

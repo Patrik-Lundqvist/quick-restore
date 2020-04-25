@@ -1,8 +1,0 @@
-{
-  "connection": {
-    "secretAccessKey": "123",
-    "accessKeyId": "123",
-    "bucket": "test-bucket"
-  },
-  "prefix": ""
-}
