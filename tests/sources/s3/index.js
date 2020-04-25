@@ -3,12 +3,12 @@ const os = require('os');
 const md5File = require('md5-file/promise');
 const fs = require('fs-extra');
 
-const S3Source = require('../index');
+const S3Source = require('../../../src/sources/s3');
 const MockS3Client = require('./__mocks__/s3Client');
 const config = require('./__fixtures__/s3.json');
 const configWithPrefix = require('./__fixtures__/s3WithPrefix.json');
-const packageSettings = require('../../../../package.json');
-const noop = require('../../../utils/noop');
+const packageSettings = require('../../../package.json');
+const noop = require('../../../src/utils/noop');
 
 const tmpDir = path.join(os.tmpdir(), `./${packageSettings.name}-test`);
 const cacheFixture = path.join(__dirname, './__fixtures__/cache');

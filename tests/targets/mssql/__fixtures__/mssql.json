@@ -1,8 +1,8 @@
 {
   "connection": {
-    "server": "127.0.0.1",
+    "server": "localhost",
     "username": "sa",
-    "password": "Password12!",
+    "password": "eAs5Ge788Dou7UVb",
     "database": "test990681344"
   },
   "script": "test.sql"

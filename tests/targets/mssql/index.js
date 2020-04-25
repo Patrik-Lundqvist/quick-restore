@@ -1,12 +1,9 @@
-const MssqlDriver = require('../index');
+const MssqlDriver = require('../../../src/targets/mssql');
 const path = require('path');
 const config = require('./__fixtures__/mssql.json');
-const MssqlClient = require('../mssqlClient');
+const MssqlClient = require('../../../src/targets/mssql/mssqlClient');
 
-const testFile = path.join(
-  __dirname,
-  `./__fixtures__/${config.connection.database}.bak`
-);
+const testFile = path.join(`/fixtures/${config.connection.database}.bak`);
 const basePath = path.join(__dirname, './__fixtures__');
 const timeout = 20000;
 

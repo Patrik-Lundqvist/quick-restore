@@ -3,7 +3,7 @@
   "moduleFileExtensions": [
     "js"
   ],
-  "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(js)$",
+  "testRegex": "./tests/.*.js$",
   "testPathIgnorePatterns": [
     "/__mocks__/.*$"
   ],
