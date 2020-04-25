@@ -1,39 +1,39 @@
-const fs = require('fs-extra');
-const path = require('path');
-const GCSClient = require('./gcsClient');
-const noop = require('../../utils/noop');
+const fs = require("fs-extra");
+const path = require("path");
+const GCSClient = require("./gcsClient");
+const noop = require("../../utils/noop");
 
 const baseConfig = {
   connection: {
-    bucket: '',
-    keyFilePath: ''
+    bucket: "",
+    keyFilePath: "",
   },
-  prefix: ''
+  prefix: "",
 };
 
 class GCSSource {
-  constructor (config, baseDir, logFn, GCS = GCSClient) {
+  constructor(config, baseDir, logFn, GCS = GCSClient) {
     this.gcs = new GCS(config, baseDir);
     this.baseDir = baseDir;
-    this.cacheDir = path.join(this.baseDir, '/cache/gcs');
-    this.cacheInfoPath = path.join(this.cacheDir, '/cache.json');
+    this.cacheDir = path.join(this.baseDir, "/cache/gcs");
+    this.cacheInfoPath = path.join(this.cacheDir, "/cache.json");
     this.config = Object.assign({}, baseConfig, config);
     this.log = logFn || noop;
   }
 
-  async downloadFile (key, file) {
+  async downloadFile(key, file) {
     await this.gcs.downloadFile(key, file);
   }
 
-  async createCacheInfo (file, etag) {
+  async createCacheInfo(file, etag) {
     try {
       await fs.writeJson(this.cacheInfoPath, { file, etag });
     } catch (err) {
-      throw new Error('Could not write cache file');
+      throw new Error("Could not write cache file");
     }
   }
 
-  async readCacheInfo () {
+  async readCacheInfo() {
     try {
       return await fs.readJson(this.cacheInfoPath);
     } catch (err) {
@@ -41,12 +41,12 @@ class GCSSource {
     }
   }
 
-  async downloadLatestFile () {
+  async downloadLatestFile() {
     const cacheInfo = await this.readCacheInfo();
     const latestObject = await this.getLatestObject();
 
     if (!latestObject) {
-      throw new Error('No matching file on GCS');
+      throw new Error("No matching file on GCS");
     }
 
     if (cacheInfo && cacheInfo.etag === latestObject.metadata.etag) {
@@ -64,17 +64,19 @@ class GCSSource {
     return dest;
   }
 
-  async getLatestObject () {
-    this.log('Determining latest file');
+  async getLatestObject() {
+    this.log("Determining latest file");
     const objects = await this.gcs.listObjects(this.config.prefix);
     return this.findLatestObject(objects);
   }
 
-  findLatestObject (objects) {
+  findLatestObject(objects) {
     return objects.reduce(
       (prev, current) =>
-        (prev && prev.metadata.updated > current.metadata.updated ? prev : current),
-      null
+        prev && prev.metadata.updated > current.metadata.updated
+          ? prev
+          : current,
+      null,
     );
   }
 }

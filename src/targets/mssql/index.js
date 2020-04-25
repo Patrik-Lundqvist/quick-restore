@@ -1,30 +1,30 @@
-const path = require('path');
-const fs = require('fs');
-const { promisify } = require('util');
-const MssqlClient = require('./mssqlClient');
-const noop = require('../../utils/noop');
+const path = require("path");
+const fs = require("fs");
+const { promisify } = require("util");
+const MssqlClient = require("./mssqlClient");
+const noop = require("../../utils/noop");
 
 const readFileAsync = promisify(fs.readFile);
 
 const baseConfig = {
   connection: {
-    server: '127.0.0.1',
-    username: '',
-    password: '',
-    database: ''
+    server: "127.0.0.1",
+    username: "",
+    password: "",
+    database: "",
   },
-  script: null
+  script: null,
 };
 
 class MssqlTarget {
-  constructor (config, baseDir, logFn) {
+  constructor(config, baseDir, logFn) {
     this.baseDir = baseDir;
     this.config = Object.assign({}, baseConfig, config);
     this.log = logFn || noop;
     this.sqlClient = new MssqlClient(this.config.connection);
   }
 
-  async restore (restorePoint) {
+  async restore(restorePoint) {
     await this.sqlClient.init();
 
     try {
@@ -36,7 +36,7 @@ class MssqlTarget {
     }
   }
 
-  async runRestore (restorePoint) {
+  async runRestore(restorePoint) {
     const dbExists = await this.databaseExists(this.config.connection.database);
     if (dbExists) {
       await this.closeConnections(this.config.connection.database);
@@ -48,20 +48,21 @@ class MssqlTarget {
       this.config.connection.database,
       restorePoint,
       targetLocation,
-      backupFiles
+      backupFiles,
     );
     await this.sqlClient.resetConnection();
     await this.runScript();
   }
 
-  restoreDatabase (database, restorePoint, newLocation, files) {
+  restoreDatabase(database, restorePoint, newLocation, files) {
     const bakupBasename = path.basename(restorePoint);
     this.log(`Restoring database [${bakupBasename}]`);
     const getNewFileLocation = (file, newLocation) =>
       `${newLocation}\\${path.basename(file.physicalName)}`;
 
     const moveStatements = files.map(
-      f => `move '${f.logicalName}' to '${getNewFileLocation(f, newLocation)}'`
+      (f) =>
+        `move '${f.logicalName}' to '${getNewFileLocation(f, newLocation)}'`,
     );
 
     const restoreDb = `
@@ -74,7 +75,7 @@ class MssqlTarget {
     return this.sqlClient.executeSql(restoreDb);
   }
 
-  async databaseExists (database) {
+  async databaseExists(database) {
     const selectDb = `
       select *
       from sys.databases
@@ -84,7 +85,7 @@ class MssqlTarget {
     return !!dbs.rowCount;
   }
 
-  async closeConnections (database) {
+  async closeConnections(database) {
     const setDbOffline = `
       alter database ${database}
       set offline
@@ -98,26 +99,26 @@ class MssqlTarget {
     await this.sqlClient.executeSql(setDbOnline);
   }
 
-  async getFilesFromBackup (restorePoint) {
+  async getFilesFromBackup(restorePoint) {
     const selectFileList = `
       restore filelistonly
       from disk = '${restorePoint}';
     `;
 
     const fileList = await this.sqlClient.executeSql(selectFileList);
-    return fileList.rows.map(fileProps => {
+    return fileList.rows.map((fileProps) => {
       const logicalName = fileProps.find(
-        prop => prop.metadata.colName === 'LogicalName'
+        (prop) => prop.metadata.colName === "LogicalName",
       ).value;
       const physicalName = fileProps.find(
-        prop => prop.metadata.colName === 'PhysicalName'
+        (prop) => prop.metadata.colName === "PhysicalName",
       ).value;
 
       return { logicalName, physicalName };
     });
   }
 
-  async getDefaultDataLocation (database) {
+  async getDefaultDataLocation() {
     const selectMasterLocation = `
       select physical_name
       from master.sys.master_files
@@ -126,30 +127,30 @@ class MssqlTarget {
     `;
 
     const masterFileLocation = await this.sqlClient.executeSql(
-      selectMasterLocation
+      selectMasterLocation,
     );
     return path.dirname(masterFileLocation.rows[0][0].value);
   }
 
-  async readScript (scriptPath) {
+  async readScript(scriptPath) {
     try {
       return await readFileAsync(scriptPath, {
-        encoding: 'utf8'
+        encoding: "utf8",
       });
     } catch (err) {
       throw new Error(`Could not load sql script file at ${scriptPath}`);
     }
   }
 
-  async runScript () {
+  async runScript() {
     const scriptPath = this.config.script;
     if (!scriptPath) {
       return;
     }
     const script = await this.readScript(path.join(this.baseDir, scriptPath));
-    this.log('Running script');
+    this.log("Running script");
     await this.sqlClient.executeSql(
-      `use ${this.config.connection.database}; ${script}`
+      `use ${this.config.connection.database}; ${script}`,
     );
   }
 }

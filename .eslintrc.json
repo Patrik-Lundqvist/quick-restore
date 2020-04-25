@@ -1,0 +1,12 @@
+{
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "plugins": ["prettier"],
+  "extends": ["plugin:prettier/recommended"],
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "sourceType": "module"
+  }
+}
