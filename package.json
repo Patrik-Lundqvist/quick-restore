@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "@google-cloud/storage": "3.3.1",
-    "aws-sdk": "2.543.0",
+    "aws-sdk": "2.696.0",
     "fs-extra": "9.0.1",
     "tedious": "8.3.0"
   },
@@ -37,6 +37,7 @@
     "execa": "4.0.2",
     "jest": "26.0.1",
     "jest-circus": "26.0.1",
+    "md5-file": "5.0.0",
     "prettier": "2.0.5"
   }
 }

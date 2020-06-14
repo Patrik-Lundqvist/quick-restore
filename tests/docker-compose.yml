@@ -9,3 +9,12 @@ services:
       - 1433:1433
     volumes:
       - ./targets/mssql/fixtures:/fixtures
+  s3mock:
+    image: adobe/s3mock
+    ports:
+      - "9090:9090"
+    environment:
+      - initialBuckets=test-bucket
+      - root=/buckets
+      - AWS_ACCESS_KEY_ID=123
+      - AWS_SECRET_ACCESS_KEY=123

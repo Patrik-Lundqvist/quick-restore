@@ -1,3 +1,4 @@
+const fs = require("fs-extra");
 const S3 = require("aws-sdk/clients/s3");
 
 class S3Client {
@@ -7,6 +8,8 @@ class S3Client {
       apiVersion: "2006-03-01",
       secretAccessKey: this.config.connection.secretAccessKey,
       accessKeyId: this.config.connection.accessKeyId,
+      endpoint: this.config.connection.endpoint,
+      s3ForcePathStyle: this.config.connection.s3ForcePathStyle,
     });
   }
 
@@ -33,6 +36,31 @@ class S3Client {
           }
         },
       );
+    });
+  }
+
+  upload(key, filePath) {
+    return new Promise((resolve, reject) => {
+      fs.readFile(filePath, (err, data) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        const params = {
+          Bucket: this.config.connection.bucket,
+          Key: key,
+          Body: data,
+        };
+
+        this.S3.upload(params, function (s3Error) {
+          if (s3Error) {
+            reject(s3Error);
+          } else {
+            resolve();
+          }
+        });
+      });
     });
   }
 }
