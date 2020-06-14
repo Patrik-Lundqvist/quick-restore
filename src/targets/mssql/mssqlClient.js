@@ -6,7 +6,7 @@ class MssqlClient {
     this.config = config;
   }
 
-  init() {
+  init(timeout = 0) {
     return new Promise((resolve, reject) => {
       this.connection = new Connection({
         server: this.config.server,
@@ -19,7 +19,7 @@ class MssqlClient {
         },
         options: {
           rowCollectionOnRequestCompletion: true,
-          requestTimeout: 0,
+          requestTimeout: timeout,
         },
       });
       this.connection.on("connect", (err) => {
@@ -29,7 +29,9 @@ class MssqlClient {
           resolve();
         }
       });
-      this.connection.on("error", () => {});
+      this.connection.on("error", (err) => {
+        reject(err);
+      });
     });
   }
 

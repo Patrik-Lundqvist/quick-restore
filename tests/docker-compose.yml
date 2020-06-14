@@ -1,0 +1,11 @@
+version: "3"
+services:
+  mssql:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      SA_PASSWORD: "eAs5Ge788Dou7UVb"
+      ACCEPT_EULA: "Y"
+    ports:
+      - 1433:1433
+    volumes:
+      - ./targets/mssql/fixtures:/fixtures

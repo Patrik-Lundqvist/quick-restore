@@ -1,0 +1,9 @@
+{
+  "connection": {
+    "server": "localhost",
+    "username": "sa",
+    "password": "eAs5Ge788Dou7UVb",
+    "database": "test990681344"
+  },
+  "script": "test.sql"
+}
