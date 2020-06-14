@@ -22,6 +22,11 @@ const isSameFile = (file1, file2) =>
     (hashes) => hashes[0] === hashes[1],
   );
 
+const delay = (time) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, time);
+  });
+
 describe("s3 test", function () {
   beforeEach(() => {
     fs.removeSync(`${tmpDir}/`);
@@ -30,16 +35,19 @@ describe("s3 test", function () {
   beforeAll(async () => {
     const s3Client = new S3Client(config);
     await s3Client.upload(
-      latestFilePath,
-      path.join(testBucketPath, latestFilePath),
-    );
-    await s3Client.upload(
       latestFooFilePath,
       path.join(testBucketPath, latestFooFilePath),
     );
     await s3Client.upload(
       latestBarFilePath,
       path.join(testBucketPath, latestBarFilePath),
+    );
+
+    //Upload after the others
+    await delay(1500);
+    await s3Client.upload(
+      latestFilePath,
+      path.join(testBucketPath, latestFilePath),
     );
   });
 
