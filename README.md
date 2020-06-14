@@ -86,7 +86,12 @@ https://cloud.google.com/docs/authentication/getting-started
 
 ## Troubleshooting
 
+### Connection refused
+When using MSSQL, the TCP/IP connection must be enabled. See this link on how to enable it:
+
+- https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/enable-or-disable-a-server-network-protocol?view=sql-server-ver15
+
 ### Set file system permissions
-The restoring process might be failing due to insufficient file system permissions for the database engine. See this link on how to resolve it: 
+The restoring process might be failing due to insufficient file system permissions for the database engine. Permissons must be granted to the folder where the database file is downloaded and read from. See this link on how to resolve it: 
 
 - https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/configure-file-system-permissions-for-database-engine-access?view=sql-server-2017
