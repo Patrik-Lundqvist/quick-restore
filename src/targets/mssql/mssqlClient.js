@@ -1,53 +1,55 @@
-const Connection = require('tedious').Connection;
-const Request = require('tedious').Request;
+const Connection = require("tedious").Connection;
+const Request = require("tedious").Request;
 
 class MssqlClient {
-  constructor (config) {
+  constructor(config) {
     this.config = config;
   }
 
-  init () {
+  init(timeout = 0) {
     return new Promise((resolve, reject) => {
       this.connection = new Connection({
         server: this.config.server,
         authentication: {
-          type: 'default',
+          type: "default",
           options: {
             userName: this.config.username,
-            password: this.config.password
-          }
+            password: this.config.password,
+          },
         },
         options: {
           rowCollectionOnRequestCompletion: true,
-          requestTimeout: 0
-        }
+          requestTimeout: timeout,
+          trustServerCertificate: true,
+        },
       });
-      this.connection.on('connect', err => {
+      this.connection.on("connect", (err) => {
         if (err) {
           reject(err);
         } else {
           resolve();
         }
       });
-      this.connection.on('error', () => {});
+      this.connection.on("error", (err) => {
+        reject(err);
+      });
+      this.connection.connect();
     });
   }
 
-  executeSql (sqlStatement) {
+  executeSql(sqlStatement) {
     return new Promise((resolve, reject) => {
       this.connection.execSql(
-        new Request(
-          sqlStatement,
-          (err, rowCount, rows) =>
-            (!err ? resolve({ rowCount, rows }) : reject(err))
-        )
+        new Request(sqlStatement, (err, rowCount, rows) =>
+          !err ? resolve({ rowCount, rows }) : reject(err),
+        ),
       );
     });
   }
 
-  resetConnection () {
+  resetConnection() {
     return new Promise((resolve, reject) => {
-      this.connection.reset(err => {
+      this.connection.reset((err) => {
         if (err) {
           reject(err);
         } else {
@@ -57,7 +59,7 @@ class MssqlClient {
     });
   }
 
-  close () {
+  close() {
     this.connection.close();
   }
 }

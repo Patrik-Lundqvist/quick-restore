@@ -1,12 +1,12 @@
 #! /usr/bin/env node
-const configReader = require('./utils/configReader');
-const logger = require('./utils/logger');
-const MssqlTarget = require('./targets/mssql');
-const S3Source = require('./sources/s3');
-const GCSSource = require('./sources/gcs');
-const path = require('path');
-const fs = require('fs-extra');
-const packageSettings = require('../package');
+const configReader = require("./utils/configReader");
+const logger = require("./utils/logger");
+const MssqlTarget = require("./targets/mssql");
+const S3Source = require("./sources/s3");
+const GCSSource = require("./sources/gcs");
+const path = require("path");
+const fs = require("fs-extra");
+const packageSettings = require("../package");
 const baseDir = path.join(process.cwd(), `/${packageSettings.name}`);
 const userArgs = process.argv.slice(2);
 const filePath = userArgs[0];
@@ -26,25 +26,25 @@ const runWithSource = async (source, target) => {
   await target.restore(file);
 };
 
-const getTarget = config => {
+const getTarget = (config) => {
   if (!config.target) {
-    throw new Error('No target setting found');
+    throw new Error("No target setting found");
   }
   return new MssqlTarget(config.target, baseDir, logger);
 };
 
-const getSource = config => {
+const getSource = (config) => {
   if (!config.source) {
-    throw new Error('No source setting found');
+    throw new Error("No source setting found");
   }
 
-  if (config.source.client === 'gcs') {
+  if (config.source.client === "gcs") {
     return new GCSSource(config.source, baseDir, logger);
-  } else if (config.source.client === 's3') {
+  } else if (config.source.client === "s3") {
     return new S3Source(config.source, baseDir, logger);
   }
 
-  throw new Error('No matching source client found');
+  throw new Error("No matching source client found");
 };
 
 const restore = async () => {
@@ -61,6 +61,6 @@ const restore = async () => {
 
 restore()
   .then(() => {
-    logger('Done!', '🎉');
+    logger("Done!", "🎉");
   })
-  .catch(err => logger(err, '⚠️'));
+  .catch((err) => logger(err, "⚠️"));
