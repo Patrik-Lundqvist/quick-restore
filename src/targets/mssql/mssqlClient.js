@@ -20,6 +20,7 @@ class MssqlClient {
         options: {
           rowCollectionOnRequestCompletion: true,
           requestTimeout: timeout,
+          trustServerCertificate: true,
         },
       });
       this.connection.on("connect", (err) => {
@@ -32,6 +33,7 @@ class MssqlClient {
       this.connection.on("error", (err) => {
         reject(err);
       });
+      this.connection.connect();
     });
   }
 

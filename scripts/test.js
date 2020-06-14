@@ -13,7 +13,8 @@ runJest();
 function stopDockerContainers() {
   const command = `docker-compose \
                   -f ${`${dockerComposePath}`} \
-                  down`;
+                  down \
+                  --remove-orphans`;
 
   execa.commandSync(command);
 }
