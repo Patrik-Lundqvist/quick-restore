@@ -21,6 +21,7 @@ class MssqlClient {
           rowCollectionOnRequestCompletion: true,
           requestTimeout: timeout,
           trustServerCertificate: true,
+          validateBulkLoadParameters: true,
         },
       });
       this.connection.on("connect", (err) => {
