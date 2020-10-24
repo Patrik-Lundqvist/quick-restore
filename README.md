@@ -14,16 +14,22 @@ Targets:
 
 ## Usage
 
+### Install
+
+```
+npm install quick-restore -g
+```
+
 ### Restore a [workspace](#setup-workspace)
 
 ```
-npx quick-restore
+quick-restore
 ```
 
 ### Restore a local file
 
 ```
-npx quick-restore <filepath>
+quick-restore <filepath>
 ```
 
 ## Setup workspace
