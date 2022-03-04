@@ -43,7 +43,11 @@ class MssqlTarget {
     }
 
     const targetLocation = await this.getDefaultDataLocation();
-    const backupFiles = await this.getFilesFromBackup(restorePoint);
+    const backupFiles = await this.getFilesFromBackup(
+      restorePoint,
+      dbExists,
+      this.config.connection.database,
+    );
     await this.restoreDatabase(
       this.config.connection.database,
       restorePoint,
@@ -57,8 +61,9 @@ class MssqlTarget {
   restoreDatabase(database, restorePoint, newLocation, files) {
     const bakupBasename = path.basename(restorePoint);
     this.log(`Restoring database [${bakupBasename}]`);
+
     const getNewFileLocation = (file, newLocation) =>
-      `${newLocation}\\${path.basename(file.physicalName)}`;
+      path.resolve(newLocation, file.physicalName);
 
     const moveStatements = files.map(
       (f) =>
@@ -99,14 +104,14 @@ class MssqlTarget {
     await this.sqlClient.executeSql(setDbOnline);
   }
 
-  async getFilesFromBackup(restorePoint) {
+  async getFilesFromBackup(restorePoint, dbExists, dbName) {
     const selectFileList = `
       restore filelistonly
       from disk = '${restorePoint}';
     `;
 
     const fileList = await this.sqlClient.executeSql(selectFileList);
-    return fileList.rows.map((fileProps) => {
+    const backupFileList = fileList.rows.map((fileProps) => {
       const logicalName = fileProps.find(
         (prop) => prop.metadata.colName === "LogicalName",
       ).value;
@@ -116,6 +121,34 @@ class MssqlTarget {
 
       return { logicalName, physicalName };
     });
+
+    if (dbExists) {
+      const dbIdSelect = `
+        select database_id 
+        from sys.databases 
+        where name = '${dbName}'
+      `;
+
+      const dbIdList = await this.sqlClient.executeSql(dbIdSelect);
+      const dbId = dbIdList.rows[0][0].value;
+
+      for (const key in backupFileList) {
+        const selectExistingPhysicalFile = `
+          select physical_name
+          from sys.master_files
+          where database_id = '${dbId}'
+          and name = '${backupFileList[key].logicalName}'
+        `;
+
+        const existingFile = await this.sqlClient.executeSql(
+          selectExistingPhysicalFile,
+        );
+
+        backupFileList[key].physicalName = existingFile.rows[0][0].value;
+      }
+    }
+
+    return backupFileList;
   }
 
   async getDefaultDataLocation() {
