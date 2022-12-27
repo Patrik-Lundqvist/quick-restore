@@ -42,7 +42,7 @@ class MssqlClient {
     return new Promise((resolve, reject) => {
       this.connection.execSql(
         new Request(sqlStatement, (err, rowCount, rows) =>
-          !err ? resolve({ rowCount, rows }) : reject(err),
+          !err ? resolve({ rowCount, rows }) : reject(err.errors.join("\n")),
         ),
       );
     });
