@@ -18,6 +18,8 @@ class MssqlClient {
           },
         },
         options: {
+          instanceName: this.config.instanceName,
+          port: this.config.port,
           rowCollectionOnRequestCompletion: true,
           requestTimeout: timeout,
           trustServerCertificate: true,

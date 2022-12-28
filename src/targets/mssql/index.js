@@ -9,6 +9,8 @@ const readFileAsync = promisify(fs.readFile);
 const baseConfig = {
   connection: {
     server: "localhost",
+    instanceName: null,
+    port: null,
     username: "",
     password: "",
     database: "",
