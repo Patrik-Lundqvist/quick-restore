@@ -3,6 +3,7 @@ const fs = require("fs");
 const { promisify } = require("util");
 const MssqlClient = require("./mssqlClient");
 const noop = require("../../utils/noop");
+const crypto = require("crypto");
 
 const readFileAsync = promisify(fs.readFile);
 
@@ -59,8 +60,14 @@ class MssqlTarget {
   restoreDatabase(database, restorePoint, newLocation, files) {
     const bakupBasename = path.basename(restorePoint);
     this.log(`Restoring database [${bakupBasename}]`);
-    const getNewFileLocation = (file, newLocation) =>
-      `${newLocation}\\${path.basename(file.physicalName)}`;
+
+    const getNewFileLocation = (file, newLocation) => {
+      const logicalName = file.logicalName;
+      const uuid = crypto.randomUUID();
+      const fileExtension = path.extname(file.physicalName);
+      const newFileName = `${logicalName}_${uuid}${fileExtension}`;
+      return path.resolve(newLocation, newFileName);
+    };
 
     const moveStatements = files.map(
       (f) =>
