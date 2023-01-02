@@ -42,7 +42,7 @@ class MssqlTarget {
   async runRestore(restorePoint) {
     const dbExists = await this.databaseExists(this.config.connection.database);
     if (dbExists) {
-      await this.closeConnections(this.config.connection.database);
+      await this.closeExternalConnections(this.config.connection.database);
     }
 
     const targetLocation = await this.getDefaultDataLocation();
@@ -94,7 +94,7 @@ class MssqlTarget {
     return !!dbs.rowCount;
   }
 
-  async closeConnections(database) {
+  async closeExternalConnections(database) {
     const setDbOffline = `
       alter database ${database}
       set offline
