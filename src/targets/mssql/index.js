@@ -42,46 +42,45 @@ class MssqlTarget {
   async runRestore(restorePoint) {
     const dbExists = await this.databaseExists(this.config.connection.database);
     if (dbExists) {
-      await this.closeConnections(this.config.connection.database);
+      await this.closeExternalConnections(this.config.connection.database);
     }
 
-    const targetLocation = await this.getDefaultDataLocation();
-    const backupFiles = await this.getFilesFromBackup(restorePoint);
     await this.restoreDatabase(
       this.config.connection.database,
       restorePoint,
-      targetLocation,
-      backupFiles,
+      dbExists,
     );
     await this.sqlClient.resetConnection();
     await this.runScript();
   }
 
-  restoreDatabase(database, restorePoint, newLocation, files) {
-    const bakupBasename = path.basename(restorePoint);
-    this.log(`Restoring database [${bakupBasename}]`);
+  async restoreDatabase(database, restorePoint, dbExists) {
+    const backupName = path.basename(restorePoint);
+    this.log(`Restoring database [${backupName}]`);
 
-    const getNewFileLocation = (file, newLocation) => {
-      const logicalName = file.logicalName;
-      const uuid = crypto.randomUUID();
-      const fileExtension = path.extname(file.physicalName);
-      const newFileName = `${logicalName}_${uuid}${fileExtension}`;
-      return path.resolve(newLocation, newFileName);
-    };
-
-    const moveStatements = files.map(
-      (f) =>
-        `move '${f.logicalName}' to '${getNewFileLocation(f, newLocation)}'`,
-    );
-
-    const restoreDb = `
+    let restoreDb = `
       restore database ${database}
       from disk = '${restorePoint}'
-      with replace,
-      ${moveStatements};
+      with replace
     `;
 
-    return this.sqlClient.executeSql(restoreDb);
+    // Specify physical locations only for new databases using move statements
+    if (!dbExists) {
+      const targetFolder = await this.getDefaultDataLocation();
+      const files = await this.getFilesFromBackup(restorePoint);
+      const moveStatements = files.map(
+        (file) => `
+          move 
+            '${file.logicalName}'
+          to
+            '${path.resolve(targetFolder, this.generatePhysicalName(file))}'
+        `,
+      );
+
+      restoreDb += `,${moveStatements}`;
+    }
+
+    await this.sqlClient.executeSql(restoreDb);
   }
 
   async databaseExists(database) {
@@ -94,7 +93,7 @@ class MssqlTarget {
     return !!dbs.rowCount;
   }
 
-  async closeConnections(database) {
+  async closeExternalConnections(database) {
     const setDbOffline = `
       alter database ${database}
       set offline
@@ -161,6 +160,13 @@ class MssqlTarget {
     await this.sqlClient.executeSql(
       `use ${this.config.connection.database}; ${script}`,
     );
+  }
+
+  generatePhysicalName(file) {
+    const logicalName = file.logicalName;
+    const uuid = crypto.randomUUID();
+    const fileExtension = path.extname(file.physicalName);
+    return `${logicalName}_${uuid}${fileExtension}`;
   }
 }
 
